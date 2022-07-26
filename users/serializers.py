@@ -12,13 +12,13 @@ class UserSerializer(BaseUserserializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class ApplicantSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
+    user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Applicant
         fields = ['id', 'user_id', 'phone', 'date_of_birth', 'country', 'education', 'resume']
 
 class RecruiterSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
+    user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Recruiter
         fields = ['id', 'user_id', 'phone', 'country', 'company']

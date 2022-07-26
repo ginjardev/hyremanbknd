@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from users.models import *
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
@@ -14,6 +15,7 @@ from users.serializers import ApplicantSerializer, RecruiterSerializer
 class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = Applicant.objects.all()
     serializer_class = ApplicantSerializer 
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET', 'PUT'])
     def me(self, request):
@@ -34,9 +36,16 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
 class RecruiterViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = Recruiter.objects.all()
     serializer_class = RecruiterSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET', 'PUT'])
     def me(self, request):
-        recruiter = Recruiter.objects.get(user_id=request.user.id)  
-        serializer = RecruiterSerializer(recruiter)
-        return Response(serializer.data)
+        (recruiter, created) = Recruiter.objects.get_or_create(user_id=request.user.id)
+        if request.method == 'GET':
+            serializer = RecruiterSerializer(recruiter)
+            return Response(serializer.data)
+        elif request.method == 'PUT':
+            serializer = RecruiterSerializer(recruiter, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
