@@ -5,7 +5,7 @@ from djoser.serializers import UserSerializer as BaseUserserializer, UserCreateS
 
 class UserCreateSerializer(BaseUserCreateSerializer):
     class Meta(BaseUserCreateSerializer.Meta):
-        fields = ['id', 'username','first_name', 'last_name', 'password', 'email']
+        fields = ['id', 'username','first_name', 'last_name','email', 'password']
  
 class UserSerializer(BaseUserserializer):
     class Meta(BaseUserserializer.Meta):
@@ -15,12 +15,12 @@ class ApplicantSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Applicant
-        fields = ['id', 'user_id', 'phone', 'date_of_birth', 'country', 'education', 'resume']
+        fields = ['id', 'user', 'user_id', 'phone', 'date_of_birth', 'country', 'education', 'resume']
 
 class RecruiterSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Recruiter
-        fields = ['id', 'user_id', 'phone', 'country', 'company']
+        fields = ['id', 'user', 'user_id', 'phone', 'country', 'company']
 
 

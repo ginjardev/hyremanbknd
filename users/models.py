@@ -5,6 +5,8 @@ from django.db import models
 # Create your models here.
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    is_recruiter = models.BooleanField(default=False)
+    
 
 
 class Applicant(models.Model):
