@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'https://hyremanbackend.herokuapp.com/', 'http://hyremanbackend.herokuapp.com/', 'hyremanbackend.herokuapp.com/']
 # Application definition
 
 INSTALLED_APPS = [
