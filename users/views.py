@@ -40,7 +40,7 @@ class CreateUserView(generics.CreateAPIView):
         email = validated_data.get('email', None)
         first_name = validated_data.get('first_name', None)
         last_name = validated_data.get('last_name', None)
-        is_recruiter = validated_data.get('is_recruiter', True)
+        is_recruiter = validated_data.get('is_recruiter', False)
 
         if password != confirm_password:
             self.raise_error('Passwords does not match')
@@ -48,6 +48,7 @@ class CreateUserView(generics.CreateAPIView):
             self.raise_error('Password should be 6 or more characters')
 
         user = serializer.save(first_name=first_name, last_name=last_name, email = email, password = password, is_recruiter=is_recruiter)
+        print(user.is_recruiter)
         
 
     def create(self, request, *args, **kwargs):
