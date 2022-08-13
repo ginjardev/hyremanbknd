@@ -7,7 +7,7 @@ from django.conf import settings
 # Create your models here.
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, first_name, last_name, password=None,**extra_fields):
+    def create_user(self, email, first_name, last_name,is_recruiter, password=None, **extra_fields):
         if not email:
             raise ValueError("Users must have an email address")
         if not password:
@@ -16,9 +16,8 @@ class UserManager(BaseUserManager):
             raise ValueError("First and last name is required")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, first_name=first_name, last_name=last_name)
+        user = self.model(email=email, first_name=first_name, last_name=last_name, is_recruiter=is_recruiter,)
         user.set_password(password)
-
         user.save(using=self._db)
 
         return user
@@ -140,5 +139,5 @@ class Skills(models.Model):
 class SelectedCandidate(models.Model):
     class Meta:
         unique_together = (('recruiter', 'applicant'))
-    recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE)
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE, related_name='SelectedCandidate_recruiter')
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name='SelectedCandidate_applicant')

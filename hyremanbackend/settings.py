@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'https://hyremanbackend.herokuapp.com/', 'http://hyremanbackend.herokuapp.com/', 'hyremanbackend.herokuapp.com/']
+ALLOWED_HOSTS = ['*', 'http://localhost']
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,15 +41,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'cloudinary_storage',
     'cloudinary',
     'jobs',
     'users',
+    'frontend',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,6 +62,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_CREDENTIALS = True
+
+def skip_suspicious_operations(record):
+    if record.name == 'django.security.DisallowedHost':
+        return False
+    return True
 
 ROOT_URLCONF = 'hyremanbackend.urls'
 

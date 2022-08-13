@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, get_user_model
 class UserSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'email', 'first_name', 'last_name', 'password']
+        fields = ['id', 'email', 'first_name', 'last_name', 'password', 'is_recruiter']
         read_only_fields =  ('id', 'password',)
 
     def validate(self, data):
@@ -22,7 +22,7 @@ class UserSerializer(ModelSerializer):
 
     def create(self, validated_data):
         """create and return a new user"""
-        
+
         user = get_user_model().objects.create_user(**validated_data)
         return user
 
