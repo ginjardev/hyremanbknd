@@ -111,7 +111,7 @@ class Applicant(models.Model):
     education = models.CharField(max_length=255,choices=EDUCATIONAL_LEVEL, default=BACHELOR_OF_SCIENCE)
     resume = models.FileField(upload_to='resume_bank', blank=False, null = True,)
     skills = models.ManyToManyField(Skill, blank=True, related_name='applicants')
-    experience_level = models.CharField(max_length=100, choices=EXPERIENCE_LEVEL, default='Entry Level', verbose_name='Experience Level')
+    experience_level = models.CharField(max_length=100, choices=EXPERIENCE_LEVEL, default='Entry Level')
     tools = models.ManyToManyField(Tool, blank=True, default='Google Workspace')
    
 

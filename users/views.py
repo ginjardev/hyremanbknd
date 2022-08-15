@@ -95,8 +95,8 @@ class CreateTokenView(ObtainAuthToken):
 class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet, ListModelMixin):
     serializer_class = ApplicantSerializer 
     queryset = Applicant.objects.all()
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
 
     @action(detail=False, methods=['GET', 'PUT', 'PATCH'])
     def me(self, request):
@@ -133,7 +133,7 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
         region = self.request.query_params.get('region') or ""
         gender = self.request.query_params.get('gender') or ""
         skills = self.request.query_params.get('skills') or ""
-        experience = self.request.query_params.get('experience') or ""
+        experience_level = self.request.query_params.get('experience_level') or ""
         tools = self.request.query_params.get('tools') or ""
 
         if education:
@@ -146,8 +146,8 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
             queryset = queryset.filter(gender=gender)
         if skills:
             queryset = queryset.filter(skills=skills)
-        if experience:
-            queryset = queryset.filter(experience=experience)
+        if experience_level:
+            queryset = queryset.filter(experience_level=experience_level)
         if tools:
             queryset = queryset.filter(tools=tools)
 
