@@ -31,9 +31,9 @@ class UserManager(BaseUserManager):
     #     return user
 
 
-    def create_superuser(self, email, password, first_name='hyreman', last_name='admin'):
+    def create_superuser(self, email, password, first_name='hyreman', last_name='admin', is_recruiter=True):
         """Create superuser profile"""
-        user = self.create_user(email, first_name, last_name, password=password)
+        user = self.create_user(email, first_name, last_name, is_recruiter, password=password)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -54,18 +54,29 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     USERNAME_FIELD = 'email'
 
+class Skill(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
     
+
+class Tool(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    
+    def __str__(self):
+        return self.name
 
 
 class Applicant(models.Model):
     HIGH_SCHOOL_CERTIFICATE = 'SSCE'
-    DIPLOMA = 'Dip'
-    BACHELOR_OF_SCIENCE = 'BSc'
-    BACHELOR_OF_ARTS = 'BA'  
-    BACHELOR_OF_ENGINEERING = 'BEng'  
-    MASTER_OF_SCIENCE = 'MSc'  
-    MASTER_OF_BUSINESS_ADMINISTRATION = 'MBA' 
-    DOCTORAL_DEGREE = 'Dr'        
+    DIPLOMA = 'Diploma'
+    BACHELOR_OF_SCIENCE = 'Bachelor of Science'
+    BACHELOR_OF_ARTS = 'Bachelor of Arts'  
+    BACHELOR_OF_ENGINEERING = 'Bachelor of Engineering'  
+    MASTER_OF_SCIENCE = 'Master of Science'  
+    MASTER_OF_BUSINESS_ADMINISTRATION = 'Master of Business Administration' 
+    DOCTORAL_DEGREE = 'Doctorate Degree'        
     EDUCATIONAL_LEVEL = [
         (HIGH_SCHOOL_CERTIFICATE, 'SSCE'),
         (DIPLOMA, 'Diploma'),
@@ -77,6 +88,12 @@ class Applicant(models.Model):
         (DOCTORAL_DEGREE, 'Doctorate Degree'),
     ]
 
+    EXPERIENCE_LEVEL = [
+        ('Entry Level', 'Entry Level'),
+        ('Mid Level', 'Mid Level'),
+        ('Senior Level', 'Senior Level'),
+    ]
+
     MALE = 'M'
     FEMALE = 'F'
 
@@ -84,21 +101,24 @@ class Applicant(models.Model):
         (MALE, 'Male'),
         (FEMALE, 'Female')
     ]
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER_OPTION, default=MALE)
-    image = models.ImageField(upload_to='profile_photo')
+    image = models.ImageField(upload_to='profile_photo', blank=True)
     phone = models.CharField(max_length= 13, blank=False, null=False)
     date_of_birth = models.DateField(null=True, blank=True)
     country = models.CharField(max_length=100, blank=False, null=False)
     region = models.CharField(max_length=150, blank=False, null=False)
-    education = models.CharField(max_length=33,choices=EDUCATIONAL_LEVEL, default=BACHELOR_OF_SCIENCE)
+    education = models.CharField(max_length=255,choices=EDUCATIONAL_LEVEL, default=BACHELOR_OF_SCIENCE)
     resume = models.FileField(upload_to='resume_bank', blank=False, null = True,)
-    skills = models.ManyToOneRel
+    skills = models.ManyToManyField(Skill, blank=True, related_name='applicants')
+    experience_level = models.CharField(max_length=100, choices=EXPERIENCE_LEVEL, default='Entry Level', verbose_name='Experience Level')
+    tools = models.ManyToManyField(Tool, blank=True, default='Google Workspace')
+   
 
 
     def __str__(self) -> str:
         return f'{self.user.first_name} {self.user.last_name}'
+
 
 
 class Recruiter(models.Model):
@@ -129,10 +149,6 @@ class PasswordReset(models.Model):
         return self.user.name
 
 
-
-class Skills(models.Model):
-    name = models.CharField(max_length=255)
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
 
 
 

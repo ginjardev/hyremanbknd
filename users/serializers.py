@@ -38,6 +38,13 @@ class UserSerializer(ModelSerializer):
         return user
 
 
+class SkillSerializer(ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ['name']
+
+
+
 class AuthTokenSerializer(serializers.Serializer):
     """serializer for user authentication"""
     email = serializers.CharField()
@@ -69,10 +76,13 @@ class AuthTokenSerializer(serializers.Serializer):
 
 class ApplicantSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    
+    skills = SkillSerializer(read_only=True, many=True)
     class Meta:
         model = Applicant
-        fields = ('id', 'user', 'phone', 'date_of_birth', 'country', 'education', 'resume')
+        fields = ('id', 'user', 'phone', 'gender', 'date_of_birth', 'country', 'region', 'education', 'skills', 'experience_level', 'resume')
         read_only_fields = ('id', 'user',)
+
 
     def create(self, validated_data):
         """create profile"""
