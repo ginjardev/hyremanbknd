@@ -1,3 +1,4 @@
+from json import tool
 from rest_framework.response import Response
 from users.models import *
 from rest_framework.permissions import IsAuthenticated
@@ -48,7 +49,7 @@ class CreateUserView(generics.CreateAPIView):
             self.raise_error('Password should be 6 or more characters')
 
         user = serializer.save(first_name=first_name, last_name=last_name, email = email, password = password, is_recruiter=is_recruiter)
-        print(user.is_recruiter)
+        
         
 
     def create(self, request, *args, **kwargs):
@@ -102,6 +103,7 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
         (applicant, created) = Applicant.objects.get_or_create(user_id = request.user.id)
         if request.method == 'GET':
             serializer = ApplicantSerializer(applicant)
+           
             return Response(serializer.data)
         elif request.method == 'PUT':
             serializer = ApplicantSerializer(applicant, data=request.data)
@@ -118,6 +120,7 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+        print(serializer.data[0]['skills'])
         return Response(serializer.data)    
 
 
@@ -127,13 +130,26 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
 
         education = self.request.query_params.get('education') or ""
         country = self.request.query_params.get('country') or ""
-        region = self.request.query_params.get('education') or ""
+        region = self.request.query_params.get('region') or ""
         gender = self.request.query_params.get('gender') or ""
+        skills = self.request.query_params.get('skills') or ""
+        experience = self.request.query_params.get('experience') or ""
+        tools = self.request.query_params.get('tools') or ""
 
         if education:
             queryset = queryset.filter(education=education)
         if country:
             queryset = queryset.filter(country=country)
+        if region:
+            queryset = queryset.filter(region=region)
+        if gender:
+            queryset = queryset.filter(gender=gender)
+        if skills:
+            queryset = queryset.filter(skills=skills)
+        if experience:
+            queryset = queryset.filter(experience=experience)
+        if tools:
+            queryset = queryset.filter(tools=tools)
 
         return queryset.distinct()
 

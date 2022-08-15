@@ -17,4 +17,5 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(Applicant)
 admin.site.register(Recruiter)
-admin.site.register(Skills)
+admin.site.register(Skill)
+admin.site.register(Tool)
