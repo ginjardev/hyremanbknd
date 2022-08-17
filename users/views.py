@@ -132,7 +132,7 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
         country = self.request.query_params.get('country') or ""
         region = self.request.query_params.get('region') or ""
         gender = self.request.query_params.get('gender') or ""
-        skills = self.request.query_params.get('skills') or ""
+        skills = self.request.query_params.get('skills_name') or ""
         experience_level = self.request.query_params.get('experience_level') or ""
         tools = self.request.query_params.get('tools') or ""
 
