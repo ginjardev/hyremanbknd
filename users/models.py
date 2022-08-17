@@ -71,21 +71,14 @@ class Tool(models.Model):
 class Applicant(models.Model):
     HIGH_SCHOOL_CERTIFICATE = 'SSCE'
     DIPLOMA = 'Diploma'
-    BACHELOR_OF_SCIENCE = 'Bachelor of Science'
-    BACHELOR_OF_ARTS = 'Bachelor of Arts'  
-    BACHELOR_OF_ENGINEERING = 'Bachelor of Engineering'  
-    MASTER_OF_SCIENCE = 'Master of Science'  
-    MASTER_OF_BUSINESS_ADMINISTRATION = 'Master of Business Administration' 
-    DOCTORAL_DEGREE = 'Doctorate Degree'        
+    UNDERGRADUATE_DEGREE = 'Undergraduate Degree'
+    POSTGRADUATE_DEGREE = 'Postgraduate Degree'      
+
     EDUCATIONAL_LEVEL = [
         (HIGH_SCHOOL_CERTIFICATE, 'SSCE'),
         (DIPLOMA, 'Diploma'),
-        (BACHELOR_OF_SCIENCE, 'Bachelor of Science'),
-        (BACHELOR_OF_ARTS, 'Bachelor of Arts'),
-        (BACHELOR_OF_ENGINEERING, 'Bachelor of Engineering'),
-        (MASTER_OF_SCIENCE, 'Master of Science'),
-        (MASTER_OF_BUSINESS_ADMINISTRATION, 'Master of Business Administration'),
-        (DOCTORAL_DEGREE, 'Doctorate Degree'),
+        (UNDERGRADUATE_DEGREE, 'Undergraduate Degree'),
+        (POSTGRADUATE_DEGREE, 'Postgraduate Degree'),
     ]
 
     EXPERIENCE_LEVEL = [
@@ -108,7 +101,7 @@ class Applicant(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     country = models.CharField(max_length=100, blank=False, null=False)
     region = models.CharField(max_length=150, blank=False, null=False)
-    education = models.CharField(max_length=255,choices=EDUCATIONAL_LEVEL, default=BACHELOR_OF_SCIENCE)
+    education = models.CharField(max_length=255,choices=EDUCATIONAL_LEVEL, default=UNDERGRADUATE_DEGREE)
     resume = models.FileField(upload_to='resume_bank', blank=False, null = True,)
     skills = models.ManyToManyField(Skill, blank=True, related_name='applicants')
     experience_level = models.CharField(max_length=100, choices=EXPERIENCE_LEVEL, default='Entry Level')

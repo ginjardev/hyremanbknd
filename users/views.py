@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
-from users.serializers import ApplicantSerializer, AuthTokenSerializer, RecruiterSerializer, SelectedCandidateSerializer, UserSerializer, PasswordResetSerializer 
+from users.serializers import ApplicantSerializer, AuthTokenSerializer, RecruiterSerializer, SelectedCandidateSerializer, UserSerializer, PasswordResetSerializer , SkillSerializer
 from rest_framework import generics
 from django.contrib.auth import get_user_model
 from rest_framework import status
@@ -206,6 +206,11 @@ class SelectedApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModel
 
 
 
+class SkillList(APIView):
+    def get(self, request):
+        skills = Skill.objects.all()
+        serializer = SkillSerializer(skills, many=True)
+        return Response(serializer.data)
 
 
 

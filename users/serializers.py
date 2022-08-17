@@ -41,7 +41,7 @@ class UserSerializer(ModelSerializer):
 class SkillSerializer(ModelSerializer):
     class Meta:
         model = Skill
-        fields = ['name']
+        fields = ['id','name']
 
 
 
