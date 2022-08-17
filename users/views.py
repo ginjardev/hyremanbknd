@@ -120,7 +120,6 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        print(serializer.data[0]['skills'])
         return Response(serializer.data)    
 
 
@@ -132,7 +131,7 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
         country = self.request.query_params.get('country') or ""
         region = self.request.query_params.get('region') or ""
         gender = self.request.query_params.get('gender') or ""
-        skills = self.request.query_params.get('skills_name') or ""
+        skills = self.request.query_params.get('skills') or ""
         experience_level = self.request.query_params.get('experience_level') or ""
         tools = self.request.query_params.get('tools') or ""
 
@@ -145,7 +144,7 @@ class ApplicantViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, G
         if gender:
             queryset = queryset.filter(gender=gender)
         if skills:
-            queryset = queryset.filter(skills=skills)
+            queryset = queryset.filter(skills__in=[skills])
         if experience_level:
             queryset = queryset.filter(experience_level=experience_level)
         if tools:
